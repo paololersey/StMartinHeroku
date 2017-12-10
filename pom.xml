@@ -6,7 +6,7 @@
 	<artifactId>myProject</artifactId>
 	<name>StMartin</name>
 	<packaging>war</packaging>
-	<!--<packaging>pom</packaging>-->
+	<!--<packaging>pom</packaging> -->
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
 		<java-version>1.7</java-version>
@@ -124,8 +124,8 @@
 			<version>1.0.0</version>
 		</dependency>
 
-        <!-- Itext -->
-      
+		<!-- Itext -->
+
 		<!-- JSR 303 with Hibernate Validator -->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -157,7 +157,7 @@
 			<version>2.0.1</version>
 		</dependency>
 
-	<!-- Security (used for CSRF protection only) -->
+		<!-- Security (used for CSRF protection only) -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -205,7 +205,7 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${org.hibernate-version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -223,29 +223,29 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${org.hibernate-version}</version>
 		</dependency>
-		  <!-- MySQL database driver -->
-     	<dependency>
-		   <groupId>mysql</groupId>
-	       <artifactId>mysql-connector-java</artifactId>
-		<version>5.1.9</version>
-	</dependency>
-     	<dependency>
-     		<groupId>org.springframework</groupId>
-     		<artifactId>spring-tx</artifactId>
-     		<version>4.0.3.RELEASE</version>
-     	</dependency>
-     	<dependency>
-     		<groupId>com.itextpdf</groupId>
-     		<artifactId>itextpdf</artifactId>
-     		<version>5.5.1</version>
-     	</dependency>
-     	<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
-	<dependency>
-  	   <groupId>com.googlecode.json-simple</groupId>
-   	   <artifactId>json-simple</artifactId>
-  	   <version>1.1</version>
-    </dependency>
-     	
+		<!-- MySQL database driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.0.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1</version>
+		</dependency>
+
 	</dependencies>
 	<repositories>
 		<!-- For testing against latest Spring snapshots -->
@@ -297,97 +297,72 @@
 					<argLine>-Xmx512m</argLine>
 				</configuration>
 			</plugin>
+
+			<!-- Wildfly for Heroku -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
 				<executions>
 					<execution>
-						<id>install</id>
-						<phase>install</phase>
+						<id>unpack</id>
+						<phase>package</phase>
 						<goals>
-							<goal>sources</goal>
+							<goal>unpack</goal>
 						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.wildfly</groupId>
+									<artifactId>wildfly-dist</artifactId>
+									<version>10.1.0.Final</version>
+									<type>zip</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>target</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-				<!-- Have to use version 1.2 since version 1.3 does not appear to work 
-					with ITDs -->
-			<!--<plugin>		
-				 <groupId>org.codehaus.mojo</groupId>
-				<artifactId>aspectj-maven-plugin</artifactId>
-				
-				<version>1.2</version>
 				<dependencies>
-					
 					<dependency>
-						<groupId>org.aspectj</groupId>
-						<artifactId>aspectjrt</artifactId>
-						<version>${org.aspectj-version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.aspectj</groupId>
-						<artifactId>aspectjtools</artifactId>
-						<version>${org.aspectj-version}</version>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>5.1.9</version>
 					</dependency>
 				</dependencies>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-							<goal>test-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<outxml>true</outxml>
-					<source>${java-version}</source>
-					<target>${java-version}</target>
-				</configuration>
-			</plugin>-->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.0</version>
 			</plugin>
+
+			<!-- tell application uses the above wildfly. -->
 			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
-				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.0.6.v20130930</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
 				<configuration>
-					<webApp>
-						<contextPath>/${project.artifactId}</contextPath>
-					</webApp>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<outputDirectory>target/wildfly-10.1.0.Final/standalone/deployments</outputDirectory>
+					<warName>StMartin</warName>
 				</configuration>
 			</plugin>
+
+
 		</plugins>
 	</build>
-	
-     <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
-     <!-- Use this profile for any OpenShift specific customization your app will need. -->
-     <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
-     <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-      <profiles>
-     <profile>
-     <id>openshift</id>
-     <build>
-        <finalName>jbossas</finalName>
-        <plugins>
-          <plugin>
-            <artifactId>maven-war-plugin</artifactId>
-            <version>2.1.1</version>
-            <configuration>
-              <outputDirectory>deployments</outputDirectory>
-              <warName>ROOT</warName>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-  
- <!-- <modules>
-		<module>StMartin-webapp</module>
-  </modules>-->
-  
-  
+
+
+	<!-- When built in OpenShift the 'openshift' profile will be used when invoking 
+		mvn. -->
+	<!-- Use this profile for any OpenShift specific customization your app 
+		will need. -->
+	<!-- By default that is to put the resulting archive into the 'deployments' 
+		folder. -->
+	<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+	<!--<profiles> <profile> <id>openshift</id> <build> <finalName>jbossas</finalName> 
+		<plugins> <plugin> <artifactId>maven-war-plugin</artifactId> <version>2.1.1</version> 
+		<configuration> <outputDirectory>deployments</outputDirectory> <warName>ROOT</warName> 
+		</configuration> </plugin> </plugins> </build> </profile> </profiles> -->
+
+	<!-- <modules> <module>StMartin-webapp</module> </modules> -->
+
+
 </project>
