@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>St. Martin Project</title>
+</head>
+<div style="height: 100px;"></div>
+<div style="width: 100%; height: 200px;">
+	<div style="width: 20%; height: 200px; float: left"></div>
+	<div class="loginDiv gradient">
+		<div style="margin: 20% 20% 20% 20%;">
+			<div style="color: white;font-size:25px" align="center">
+				<b>LOGIN PAGE</b>
+			</div>
+			<div>&nbsp;</div>
+			<div class="inputLoginLabel">Username:</div>
+			<div>
+				<input type="text" data-ng-model="username" class="inputLoginField" />
+			</div>
+
+			<div>&nbsp;</div>
+			<div class="inputLoginLabel">Password:</div>
+			<div>
+				<input data-ng-model="password" type="password" class="inputLoginField" />
+			</div>
+			<div>&nbsp;</div>
+			<div class="float-left-w-100">
+				<div class="float-left-w-49">
+					<button data-ng-click="submitOk()"
+						class="btn btn-primary loginButton borderBottomLogin ">OK</button>
+				</div>
+				<div class="float-left-w-49">
+				    <button data-ng-click="submitCancel()"
+						class="btn btn-primary loginButton borderBottomLogin borderLeftLogin">CANCEL</button>
+				</div>
+			</div>
+			<div align="center" >
+			<div class="float-left-w-24">&nbsp;</div>
+				<div class="float-left-w-49"><button data-ng-click="submitChangePwd()"
+					class="btn btn-primary loginButton">MODIFY</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div style="width: 100%; height: 400px;"></div>
+</html>

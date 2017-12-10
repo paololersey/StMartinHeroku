@@ -1,0 +1,90 @@
+
+<div class="modal-header">
+	<h3 class="modal-title">Insert/update nature of case</h3>
+</div>
+<div class="modal-body">
+
+	<form name="form" id="insertForm" novalidate>
+
+		<div>
+			<span class="formMainSpan"> <span class="subFormSpanLeft">Beneficiary:
+			</span> <span class="subFormSpanRight"> <select
+					data-ng-model="items.objectBEN" 
+					data-ng-options='objectBEN.firstName+" "+objectBEN.lastName for objectBEN in items.beneficiaries'
+					name="beneficiary" required><option value=""></option></select>
+			</span>
+			</span> <span class="formMainSpan"> <span class="subFormSpanLeft">Nature
+					of Case: </span> <span class="subFormSpanRight"> <select
+					data-ng-model="items.natureOfCasePerson.natureOfCase"
+					data-ng-options='obj for obj in items.natureOfCasesList'
+					name="natureOfCase" required><option value=""></option></select>
+
+			</span>
+			</span>
+		</div>
+
+		<div style="height: 10px;">
+			<input upcase  type="text" hidden="true" /><br />
+		</div>
+
+		<div>
+			<span class="formMainSpan"
+				data-ng-if="items.isCPPD && items.natureOfCasePerson.natureOfCase=='DELAYED_MILESTONE'">
+				<span class="subFormSpanLeft">Delayed Milestone caused by: </span> <span
+				class="subFormSpanRight"> <select
+					data-ng-model="items.natureOfCasePerson.delayedMilestone"
+					data-ng-options="obj for obj in items.delayedMilestoneList"
+					name="delayedMilestone"></select>
+			</span>
+			</span> <span class="formMainSpan"
+				data-ng-if="items.natureOfCasePerson.natureOfCase=='OTHERS' || (items.isCPPD && items.natureOfCasePerson.natureOfCase=='DELAYED_MILESTONE' && items.natureOfCasePerson.delayedMilestone=='OTHERS')">
+				<span class="subFormSpanLeft">Specify other </span> <span
+				class="subFormSpanRight"> <input upcase  type="text"
+					data-ng-model="items.natureOfCasePerson.natureOfCaseOther"
+					name="natureOfCaseOther" required></input>
+			</span>
+			</span>
+		</div>
+		
+		
+
+
+		<div style="height: 20%;">
+			<input upcase  id="natureOfCasePersonId" type="text" hidden="true"
+				data-ng-model="items.natureOfCasePerson.natureOfCasePersonId" /><br />
+		</div>
+		<div>
+			<span class="formMainSpan" ng-show="items.isCPPR"> <span
+				class="subFormSpanLeft">Status: </span> <span
+				class="subFormSpanRight"> <select
+					ng-model="items.natureOfCasePerson.status"
+					ng-options='natureOfCaseStatus for natureOfCaseStatus in items.natureOfCasesStatusList'
+					name="natureOfCaseStatus" required><option value=""></option></select></select>
+			</span>
+			</span> <span class="formMainSpan" ng-hide="items.isCPPR"> <span
+				class="subFormSpanLeft">Date: </span> <span class="subFormSpanRight"
+				ng-controller="DatepickerDemoCtrl"> <span> <input upcase 
+						type="text" datepicker-popup="{{format}}" ng-model="items.date"
+						is-open="opened" min-date="minDate"
+						datepicker-options="dateOptions"
+						date-disabled="disabled(date, mode)" ng-required="true"
+						close-text="Close" name="natureOfCaseDate" required>
+				</span>
+					<button vtype="button" class="btn btn-default"
+						ng-click="open($event)">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button> <span> </span>
+			</span>
+			</span>
+		</div>
+
+	</form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary"
+		ng-disabled="form.$pristine || form.natureOfCase.$error.required ||
+                                                         form.beneficiary.$error.required "
+		ng-click="ok()">OK</button>
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
